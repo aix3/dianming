@@ -17,6 +17,7 @@ require(["vue", "layers", "colorPicker"], function (a) {
         fontWeight: 600,
         fontFamily: "Microsoft YaHei",
         bgImage: "",
+        emojis: "👋🏻,🤚🏻,🖐🏻,✋🏻,🖖🏻,👌🏻,🤌🏻,🤏🏻,✌🏻,🤞🏻,🤟🏻,🤘🏻,🤙🏻,👈🏻,👉🏻,👆🏻,👇🏻,☝🏻,👍🏻,✊🏻,👊🏻,🤛🏻,🤜🏻,👏🏻,🙌🏻,👐🏻,🤲🏻,👀,🎉,🙋🏻‍♀️,🙆🏻‍♂️,🙋🏻,🙋🏻‍♂️,👩🏻‍💻,🧑🏻‍💻,👨🏻‍💻"
     };
     app = new a({
         el: "#app",
@@ -116,7 +117,13 @@ require(["vue", "layers", "colorPicker"], function (a) {
                 var b = this;
                 setTimeout(function () {
                     var c = Math.floor(Math.random() * b.askArr.length);
-                    b.currentName = b.askArr[c];
+                    var currentName = b.askArr[c];
+                    if (b.emojis.length > 0) {
+                        var arr = b.emojis.split(",");
+                        var i = Math.floor(Math.random() * arr.length);
+                        currentName = arr[i] + currentName + arr[i]
+                    }
+                    b.currentName = currentName;
                     if (b.scrollStatus) {
                         b.scrollName()
                     }
