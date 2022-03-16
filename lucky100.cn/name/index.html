@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<!-- Mirrored from lucky100.cn/name/ by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 16 Mar 2022 01:44:44 GMT -->
+<!-- Added by HTTrack -->
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>5C班随机点名</title>
+    <link href="../../cdn.uukit.com/vendor/foundation/6.4.2/css/foundation.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/stylec9c3.css?v=1.1012">
+    <link rel="stylesheet" href="../../cdn.uutool.cn/vendor/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        .name-box li {
+            display: inline-block;
+            border: 1px solid #eaeaea;
+            color: #14679e;
+            line-height: 2;
+            padding: 0 10px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .scroll-box {
+            padding: 100px 0 150px 0;
+            text-align: center;
+            cursor: pointer;
+            user-select: none;
+            font-size: 100px;
+
+        }
+
+        .scroll-box span {
+            letter-spacing: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            max-width: 100%;
+            display: inline-block;
+        }
+
+        .full-screen {
+            overflow: hidden;
+        }
+
+        .full-screen .scroll-box {
+            padding: 0;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: 999999;
+            top: 0;
+            left: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        input[readonly] {
+            cursor: pointer;
+        }
+
+        .setting {
+            margin-bottom: 25px;
+        }
+
+        .container {
+            /*flex 布局*/
+            display: flex;
+            /*实现垂直居中*/
+            align-items: center;
+            /*实现水平居中*/
+            justify-content: center;
+
+            text-align: justify;
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            height: 100%;
+        }
+    </style>
+
+</head>
+
+<body>
+    <main id="app">
+        <div class="grid-x grid-margin-x" style="height: calc(100vh - 80px);">
+            <div class="cell large-12 small-12">
+                <div id="container" class="scroll-box container" title="单击开始/停止"
+                    @click="toggleAsk"
+                    :style="{fontSize:textSize+'px',backgroundColor:bgColor,color:textColor,fontWeight:fontWeight,fontFamily:fontFamily,textShadow:textShadow+' 1px 0 0, '+textShadow+' 0 10px 0, '+textShadow+' -1px 0 0, '+textShadow+' 0 -1px 0',backgroundImage:bgImage}">
+                    <span v-text="currentName">Ready</span>
+                </div>
+            </div>
+        </div>
+        <div style="margin: 20px;">
+            <div class="grid-x" style="width: 100%;">
+                <div class="cell large-12">
+                    <div class="tool-box">
+                        <div class="grid-x grid-margin-x">
+                            <div class="cell large-12 small-12">
+                                <div class="cell large-12 setting">
+                                    <div class="grid-x grid-margin-x" style="height: 50px;">
+                                        <div class="cell large-12 small-12">
+                                            <div class="operation-btn">
+                                                <button class="button small " @click="setName">设置名单</button>
+                                                <button class="button small " @click="toggleAsk">开始/停止</button>
+                                                <button class="button small " @click="showDemo">来个栗子</button>
+                                                <button class="button small " @click="fullscreen">全屏画布</button>
+                                                <button class="button small "
+                                                    @click="detailStatus=!detailStatus">显示/隐藏详情</button>
+                                                <button class="button small secondary " @click="reset">清空已点名数据</button>
+                                                <button class="button small secondary " @click="resetAll">清空所有配置</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-if="detailStatus">
+                                    <div class="cell large-12 setting">
+                                        <div class="grid-x grid-margin-x large-up-8 small-up-2">
+                                            <div class="cell">
+                                                <label for="">
+                                                    切换间隔（毫秒）
+                                                    <input type="number" step="10" min="0" placeholder="切换速度"
+                                                        v-model="speed" @change="changeProp">
+                                                </label>
+                                            </div>
+
+                                            <div class="cell">
+                                                <label for="">
+                                                    名字大小（像素）
+                                                    <input type="number" min="0" step="5" placeholder="文字大小"
+                                                        v-model="textSize" @change="changeProp">
+                                                </label>
+                                            </div>
+                                            <div class="cell">
+                                                <label for="">
+                                                    姓名颜色
+                                                    <input type="color"  @change="changeProp" v-model="textColor">
+                                                </label>
+                                            </div>
+                                            <div class="cell">
+                                                <label for="">
+                                                    名字描边
+                                                    <input type="color" v-model="textShadow" @change="changeProp">
+                                                </label>
+                                            </div>
+                                            <div class="cell">
+                                                <label for="">
+                                                    文字粗细
+                                                    <select v-model="fontWeight" @change="changeProp">
+                                                        <option value="400">细</option>
+                                                        <option value="500">正常</option>
+                                                        <option value="600">粗</option>
+                                                        <option value="700">特粗</option>
+                                                    </select>
+                                                </label>
+                                            </div>
+                                            <div class="cell">
+                                                <label for="">字体名称
+                                                    <select v-model="fontFamily" @change="changeProp">
+                                                        <option value="SimSun">宋体</option>
+                                                        <option value="SimHei">黑体</option>
+                                                        <option value="DFKai-SB">标楷体</option>
+                                                        <option value="FangSong">仿宋</option>
+                                                        <option value="KaiTi">楷体</option>
+                                                        <option value="Microsoft YaHei">微软雅黑</option>
+                                                        <option value="Microsoft JhengHei">微软正黑体</option>
+                                                        <option value="NSimSun">新宋体</option>
+                                                        <option value="PMingLiU">新细明体</option>
+                                                        <option value="MingLiU">细明体</option>
+                                                    </select>
+                                                </label>
+                                            </div>
+                                            <div class="cell">
+                                                <label for="">
+                                                    背景图片
+                                                    <input id="bg" type="file" @change="changebg">
+                                                </label>
+                                            </div>
+                                            <div class="cell">
+                                                <label for="">
+                                                    背景颜色
+                                                    <input type="color"  @change="changeProp" v-model="bgColor">
+                                                </label>
+                                            </div>
+                                            <div class="cell">
+                                                允许重复点名
+                                                <label for="">
+                                                    <input id="checkbox11" type="checkbox" v-model="isRepeat" @change="changeProp">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div v-if="0!==askedArr.length" v-cloak>
+                                        <p>已点名单：</p>
+                                        <ul class="name-box no-bullet" v-if="0!==askedArr.length" v-cloak>
+                                            <li v-for="item in askedArr" v-text="item"></li>
+                                        </ul>
+                                    </div>
+                                    <div v-if="0!==nameArr.length" v-cloak>
+                                        <p>待点名列表：</p>
+                                        <ul class="name-box no-bullet">
+                                            <li v-for="item in askArr" v-text="item"></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="../../cdn.uukit.com/vendor/requirejs/require.js"></script>
+    <script src="../assets/js/common.min4623.js?v=1.21"></script>
+    <script src="../assets/js/tools/name.min7974.js?v=2.16"></script>
+</body>
+
+<!-- Mirrored from lucky100.cn/name/ by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 16 Mar 2022 01:44:59 GMT -->
+
+</html>
