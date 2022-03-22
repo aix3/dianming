@@ -6,6 +6,7 @@ require(["vue", "layers", "colorPicker"], function (a) {
         nameArr: [],
         askedArr: [],
         askArr: [],
+        displayStr: "Ready",
         currentName: "Ready",
         scrollStatus: true,
         detailStatus: true,
@@ -17,7 +18,7 @@ require(["vue", "layers", "colorPicker"], function (a) {
         fontWeight: 600,
         fontFamily: "Microsoft YaHei",
         bgImage: "",
-        emojis: "👋🏻,🤚🏻,🖐🏻,✋🏻,🖖🏻,👌🏻,🤌🏻,🤏🏻,✌🏻,🤞🏻,🤟🏻,🤘🏻,🤙🏻,👈🏻,👉🏻,👆🏻,👇🏻,☝🏻,👍🏻,✊🏻,👊🏻,🤛🏻,🤜🏻,👏🏻,🙌🏻,👐🏻,🤲🏻,👀,🎉,🙋🏻‍♀️,🙆🏻‍♂️,🙋🏻,🙋🏻‍♂️,👩🏻‍💻,🧑🏻‍💻,👨🏻‍💻"
+        emojis: "👋🏻,🤚🏻,🖐🏻,✋🏻,🖖🏻,👌🏻,🤌🏻,🤏🏻,✌🏻,🤞🏻,🤟🏻,🤘🏻,🤙🏻,👈🏻,👉🏻,👆🏻,☝🏻,👍🏻,✊🏻,👊🏻,🤛🏻,🤜🏻,👏🏻,🙌🏻,👐🏻,🤲🏻,👀,🎉"
     };
     app = new a({
         el: "#app",
@@ -118,12 +119,14 @@ require(["vue", "layers", "colorPicker"], function (a) {
                 setTimeout(function () {
                     var c = Math.floor(Math.random() * b.askArr.length);
                     var currentName = b.askArr[c];
+                    var displayStr = currentName;
                     if (b.emojis.length > 0) {
                         var arr = b.emojis.split(",");
                         var i = Math.floor(Math.random() * arr.length);
-                        currentName = arr[i] + currentName + arr[i]
+                        displayStr = arr[i] + displayStr + arr[i]
                     }
                     b.currentName = currentName;
+                    b.displayStr = displayStr;
                     if (b.scrollStatus) {
                         b.scrollName()
                     }
